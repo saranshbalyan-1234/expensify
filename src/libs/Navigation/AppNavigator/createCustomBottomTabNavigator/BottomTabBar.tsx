@@ -1,34 +1,27 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {memo, useCallback, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect} from 'react';
 import {NativeModules, View} from 'react-native';
 import {useOnyx} from 'react-native-onyx';
 import Icon from '@components/Icon';
 import * as Expensicons from '@components/Icon/Expensicons';
 import {PressableWithFeedback} from '@components/Pressable';
 import Tooltip from '@components/Tooltip';
-import useActiveWorkspace from '@hooks/useActiveWorkspace';
 import useLocalize from '@hooks/useLocalize';
 import useTheme from '@hooks/useTheme';
 import useThemeStyles from '@hooks/useThemeStyles';
 import * as Session from '@libs/actions/Session';
-import interceptAnonymousUser from '@libs/interceptAnonymousUser';
 import linkingConfig from '@libs/Navigation/linkingConfig';
 import getAdaptedStateFromPath from '@libs/Navigation/linkingConfig/getAdaptedStateFromPath';
 import Navigation, {navigationRef} from '@libs/Navigation/Navigation';
 import type {RootStackParamList, State} from '@libs/Navigation/types';
 import {isCentralPaneName} from '@libs/NavigationUtils';
-import * as PolicyUtils from '@libs/PolicyUtils';
-import {getCurrentSearchParams} from '@libs/SearchUtils';
-import type {BrickRoad} from '@libs/WorkspacesSettingsUtils';
-import {getChatTabBrickRoad} from '@libs/WorkspacesSettingsUtils';
-import BottomTabAvatar from '@pages/home/sidebar/BottomTabAvatar';
+import ProfileAvatarWithIndicator from '@pages/home/sidebar/ProfileAvatarWithIndicator';
 import BottomTabBarFloatingActionButton from '@pages/home/sidebar/BottomTabBarFloatingActionButton';
 import variables from '@styles/variables';
 import * as Welcome from '@userActions/Welcome';
 import CONST from '@src/CONST';
 import NAVIGATORS from '@src/NAVIGATORS';
 import ONYXKEYS from '@src/ONYXKEYS';
-import type {Route} from '@src/ROUTES';
 import ROUTES from '@src/ROUTES';
 import SCREENS from '@src/SCREENS';
 
@@ -41,14 +34,7 @@ function BottomTabBar({selectedTab}: BottomTabBarProps) {
     const styles = useThemeStyles();
     const {translate} = useLocalize();
     const navigation = useNavigation();
-    const {activeWorkspaceID} = useActiveWorkspace();
     const [isLoadingApp] = useOnyx(ONYXKEYS.IS_LOADING_APP);
-    const transactionViolations = useOnyx(ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS);
-    const [chatTabBrickRoad, setChatTabBrickRoad] = useState<BrickRoad>(getChatTabBrickRoad(activeWorkspaceID));
-
-    useEffect(() => {
-        setChatTabBrickRoad(getChatTabBrickRoad(activeWorkspaceID));
-    }, [activeWorkspaceID, transactionViolations]);
 
     useEffect(() => {
         const navigationState = navigation.getState() as State<RootStackParamList> | undefined;
@@ -76,28 +62,18 @@ function BottomTabBar({selectedTab}: BottomTabBarProps) {
     }, [isLoadingApp]);
 
     const navigateToChats = useCallback(() => {
-        if (selectedTab === SCREENS.HOME) {
-            return;
-        }
-        const route = activeWorkspaceID ? (`/w/${activeWorkspaceID}/${ROUTES.HOME}` as Route) : ROUTES.HOME;
-        Navigation.navigate(route);
-    }, [activeWorkspaceID, selectedTab]);
+        Navigation.navigate(ROUTES.HOME);
+    }, [selectedTab ]);
 
     const navigateToSearch = useCallback(() => {
-        if (selectedTab === SCREENS.SEARCH.BOTTOM_TAB) {
-            return;
-        }
-        interceptAnonymousUser(() => {
-            const currentSearchParams = getCurrentSearchParams();
-            if (currentSearchParams) {
-                const {q, ...rest} = currentSearchParams;
-                const policy = PolicyUtils.getPolicy(currentSearchParams?.policyIDs);
-                Navigation.navigate(ROUTES.SEARCH_CENTRAL_PANE.getRoute({query: q, ...rest, policyIDs: policy ? currentSearchParams?.policyIDs : undefined}));
-                return;
-            }
-            Navigation.navigate(ROUTES.SEARCH_CENTRAL_PANE.getRoute({query: CONST.SEARCH.TAB.EXPENSE.ALL}));
-        });
+        Navigation.navigate(ROUTES.SEARCH);
     }, [selectedTab]);
+
+        
+    const navigateToSettings = useCallback(() => {
+        Navigation.navigate(ROUTES.SETTINGS);
+    }, [selectedTab]);
+
 
     return (
         <View style={styles.bottomTabBarContainer}>
@@ -116,9 +92,6 @@ function BottomTabBar({selectedTab}: BottomTabBarProps) {
                             width={variables.iconBottomBar}
                             height={variables.iconBottomBar}
                         />
-                        {chatTabBrickRoad && (
-                            <View style={styles.bottomTabStatusIndicator(chatTabBrickRoad === CONST.BRICK_ROAD_INDICATOR_STATUS.INFO ? theme.iconSuccessFill : theme.danger)} />
-                        )}
                     </View>
                 </PressableWithFeedback>
             </Tooltip>
@@ -140,7 +113,18 @@ function BottomTabBar({selectedTab}: BottomTabBarProps) {
                     </View>
                 </PressableWithFeedback>
             </Tooltip>
-            <BottomTabAvatar isSelected={selectedTab === SCREENS.SETTINGS.ROOT} />
+            
+            <Tooltip text={translate('initialSettingsPage.accountSettings')}>
+            <PressableWithFeedback
+                onPress={navigateToSettings}
+                role={CONST.ROLE.BUTTON}
+                accessibilityLabel={translate('sidebarScreen.buttonMySettings')}
+                wrapperStyle={styles.flex1}
+                style={styles.bottomTabBarItem}
+            >
+                <ProfileAvatarWithIndicator isSelected={selectedTab === SCREENS.SETTINGS.ROOT} />
+            </PressableWithFeedback>
+        </Tooltip>
             <View style={[styles.flex1, styles.bottomTabBarItem]}>
                 <BottomTabBarFloatingActionButton />
             </View>

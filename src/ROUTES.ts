@@ -32,6 +32,7 @@ const ROUTES = {
     ...PUBLIC_SCREENS_ROUTES,
     // This route renders the list of reports.
     HOME: 'home',
+    SEARCH:'search',
 
     SEARCH_CENTRAL_PANE: {
         route: 'search',

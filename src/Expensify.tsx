@@ -121,8 +121,8 @@ function Expensify({
         setAttemptedToOpenPublicRoom(true);
     }, [isCheckingPublicRoom]);
 
-    const isAuthenticated = useMemo(() => !!(session?.authToken ?? null), [session]);
-    const autoAuthState = useMemo(() => session?.autoAuthState ?? '', [session]);
+    const isAuthenticated = true
+    const autoAuthState = ''
 
     const shouldInit = isNavigationReady && hasAttemptedToOpenPublicRoom;
     const shouldHideSplash = shouldInit && !isSplashHidden;
