@@ -2112,6 +2112,7 @@ export default {
             expensifyCard: 'Expensify Card',
             workflows: 'Workflows',
             workspace: 'Workspace',
+            companyCards: 'Company cards',
             edit: 'Edit workspace',
             enabled: 'Enabled',
             disabled: 'Disabled',
@@ -2129,6 +2130,7 @@ export default {
             travel: 'Travel',
             members: 'Members',
             accounting: 'Accounting',
+            rules: 'Rules',
             displayedAs: 'Displayed as',
             plan: 'Plan',
             profile: 'Profile',
@@ -2838,6 +2840,10 @@ export default {
                 title: 'Spend',
                 subtitle: 'Enable functionality that helps you scale your team.',
             },
+            manageSection: {
+                title: 'Manage',
+                subtitle: 'Add controls that help keep spend within budget.',
+            },
             earnSection: {
                 title: 'Earn',
                 subtitle: 'Enable optional functionality to streamline your revenue and get paid faster.',
@@ -2870,6 +2876,13 @@ export default {
                     },
                     ctaTitle: 'Issue new card',
                 },
+            },
+            companyCards: {
+                title: 'Company Cards',
+                subtitle: 'Import spend from existing company cards',
+                disableCardTitle: 'Disable Company Cards',
+                disableCardPrompt: 'You can’t disable company cards because this feature is in use. Reach out to the Concierge for next steps.',
+                disableCardButton: 'Chat with Concierge',
             },
             workflows: {
                 title: 'Workflows',
@@ -2904,6 +2917,10 @@ export default {
                 featureEnabledText: "To enable or disable this feature, you'll need to change your accounting import settings.",
                 disconnectText: "To disable accounting, you'll need to disconnect your accounting connection from your workspace.",
                 manageSettings: 'Manage settings',
+            },
+            rules: {
+                title: 'Rules',
+                subtitle: 'Configure when receipts are required, flag high spend, and more.',
             },
         },
         reportFields: {
@@ -2976,6 +2993,7 @@ export default {
             deleteFailureMessage: 'An error occurred while deleting the tag, please try again.',
             tagRequiredError: 'Tag name is required.',
             existingTagError: 'A tag with this name already exists.',
+            invalidTagNameError: 'Tag name cannot be 0. Please choose a different value.',
             genericFailureMessage: 'An error occurred while updating the tag, please try again.',
             importedFromAccountingSoftware: 'The tags below are imported from your',
             glCode: 'GL code',
@@ -3550,6 +3568,16 @@ export default {
                 description: `Add tax codes to your taxes for easy export of expenses to your accounting and payroll systems.`,
                 onlyAvailableOnPlan: 'Tax codes are only available on the Control plan, starting at ',
             },
+            companyCards: {
+                title: 'Company Cards',
+                description: `Company cards lets you import spend for existing company cards from all major card issuers. You can assign cards to employees, and automatically import transactions.`,
+                onlyAvailableOnPlan: 'Company cards are only available on the Control plan, starting at ',
+            },
+            rules: {
+                title: 'Rules',
+                description: `Rules run in the background and keep your spend under control so you don't have to sweat the small stuff.\n\nRequire expense details like receipts and descriptions, set limits and defaults, and automate approvals and payments – all in one place.`,
+                onlyAvailableOnPlan: 'Rules are only available on the Control plan, starting at ',
+            },
             pricing: {
                 amount: '$9 ',
                 perActiveMember: 'per active member per month.',
@@ -3580,6 +3608,16 @@ export default {
             chatWithYourAdmin: 'Chat with your admin',
             chatInAdmins: 'Chat in #admins',
             addPaymentCard: 'Add payment card',
+        },
+        rules: {
+            individualExpenseRules: {
+                title: 'Expenses',
+                subtitle: 'Set spend controls and defaults for individual expenses. You can also create rules for',
+            },
+            expenseReportRules: {
+                title: 'Expense reports',
+                subtitle: 'Automate expense report compliance, approvals, and payment.',
+            },
         },
     },
     getAssistancePage: {
@@ -4186,6 +4224,7 @@ export default {
         expand: 'Expand',
         mute: 'Mute',
         unmute: 'Unmute',
+        normal: 'Normal',
     },
     exitSurvey: {
         header: 'Before you go',
